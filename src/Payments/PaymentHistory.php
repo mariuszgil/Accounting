@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace Accounting\Payments;
 
-use Accounting\Model;
-
 class PaymentHistory
 {
     /**
@@ -21,38 +19,13 @@ class PaymentHistory
     }
 
     /**
-     * @param \Accounting\Model\VirtualCreditCard $creditCard
-     * @param float $money
+     * @param \Accounting\Payments\Model\Withdrawal $withdrawal
      *
      * @return bool
      */
-    public function addPayment(
-        Model\VirtualCreditCard $creditCard,
-        float $money
-    ): bool {
-        $commision = $creditCard->getCommission();
-
-        if ($creditCard instanceof Model\CreditCardWithPercentileCommission) {
-            $commision = \bcmul(
-                (string) $creditCard->getCommission(),
-                (string) $money,
-                7
-            );
-            $commision = (float) \bcdiv($commision, '100', 2);
-        }
-
-        return $this->database->addPayment($creditCard, $money, $commision);
-    }
-
-    /**
-     * @param \Accounting\Model\VirtualCreditCard $creditCard
-     *
-     * @return int
-     */
-    public function getNumberOfPaymentsInCycle(
-        Model\VirtualCreditCard $creditCard
-    ): int {
-        return $this->database->getNumberOfPaymentsInCycle($creditCard);
+    public function addNewWithdrawal(Model\Withdrawal $withdrawal): bool
+    {
+        return $this->database->addNewWithdrawal($withdrawal);
     }
 
     /**
@@ -60,7 +33,7 @@ class PaymentHistory
      * @param int $numberOfPayments
      * @param int $page
      *
-     * @return array<int,\Accounting\Model\Transfer>
+     * @return array<int,\Accounting\Payments\Model\Withdrawal>
      */
     public function getHistory(
         int $creditCardId,

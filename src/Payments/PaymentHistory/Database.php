@@ -3,40 +3,23 @@ declare(strict_types = 1);
 
 namespace Accounting\Payments\PaymentHistory;
 
-use Accounting\Model\VirtualCreditCard;
+use Accounting\Payments\Model\Withdrawal;
 
 interface Database
 {
     /**
-     * @param \Accounting\Model\VirtualCreditCard $creditCard
-     * @param float $money
-     * @param float $commision
+     * @param \Accounting\Payments\Model\Withdrawal $withdrawal
      *
      * @return bool
      */
-    public function addPayment(
-        VirtualCreditCard $creditCard,
-        float $money,
-        float $commision
-    ): bool;
-
-    /**
-     * @param \Accounting\Model\VirtualCreditCard $creditCard
-     * @param int|null $cycle
-     *
-     * @return int
-     */
-    public function getNumberOfPaymentsInCycle(
-        VirtualCreditCard $creditCard,
-        int $cycle = null
-    ): int;
+    public function addNewWithdrawal(Withdrawal $withdrawal): bool;
 
     /**
      * @param int $creditCardId
      * @param int $numberOfPayments
      * @param int $page
      *
-     * @return array<int,\Accounting\Model\Transfer>
+     * @return array<int,\Accounting\Payments\Model\Withdrawal>
      */
     public function getHistory(
         int $creditCardId,
